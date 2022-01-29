@@ -9,7 +9,7 @@ class Expense extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['account_id', 'category_id', 'name', 'description', 'expanse_date', 'amount'];
+    protected $fillable = ['account_id', 'category_id', 'name', 'description', 'expense_date', 'amount'];
 
     /**
      * Returns account for expanse
