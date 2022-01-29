@@ -18,5 +18,7 @@ Route::post('/login', 'API\AuthController@login');
 Route::post('/register', 'API\AuthController@register');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::resource('/category', '\App\Http\Controllers\CategoryController');
+
     Route::post('/logout', 'API\AuthController@logout');
 });
