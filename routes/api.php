@@ -20,5 +20,8 @@ Route::post('/register', 'API\AuthController@register');
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/category', '\App\Http\Controllers\CategoryController');
 
+    Route::get('/expense/aggregation', '\App\Http\Controllers\ExpenseController@aggregation');
+    Route::resource('/expense', '\App\Http\Controllers\ExpenseController');
+
     Route::post('/logout', 'API\AuthController@logout');
 });
