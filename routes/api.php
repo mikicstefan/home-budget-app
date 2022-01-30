@@ -18,6 +18,8 @@ Route::post('/login', 'API\AuthController@login')->name('login');
 Route::post('/register', 'API\AuthController@register')->name('register');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::patch('/account/{account}/add-balance', '\App\Http\Controllers\AccountController@addBalance');
+
     Route::resource('/category', '\App\Http\Controllers\CategoryController');
 
     Route::get('/expense/aggregation', '\App\Http\Controllers\ExpenseController@aggregation');

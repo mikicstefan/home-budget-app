@@ -16,7 +16,8 @@ class AccountFactory extends Factory
     {
         return [
             'user_id' => User::factory()->create()->id,
-            'balance' => 500
+            'balance' => 500,
+            'name' => 'Visa'
         ];
     }
 }
