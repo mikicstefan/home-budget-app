@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreExpenseRequest;
+use App\Http\Requests\UpdateExpenseRequest;
 use App\Models\Account;
 use App\Models\Expense;
 use Carbon\Carbon;
@@ -100,38 +102,11 @@ class ExpenseController extends Controller
      *
      * Create and store new categories
      *
-     * @param Request $request
+     * @param StoreExpenseRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(StoreExpenseRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'account_id' => 'required|exists:accounts,id',
-            'category_id' => 'required|exists:categories,id',
-            'description' => 'nullable',
-            'expense_date' => 'required|date_format:d.m.Y',
-            'amount' => 'required|numeric|gt:0'
-        ]);
-
-        $validator->after(function ($validator) use ($request){
-            if (!empty($request->account_id)) {
-                $account = Account::whereId($request->account_id)->first();
-
-                if (!empty($account)) {
-                    if ($account->balance - $request->amount < 0) {
-                        return $validator->errors()->add(
-                            'amount', 'Amount too big! There are not enough funds in the account'
-                        );
-                    }
-                }
-            }
-        });
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
         $expense = Expense::create([
             'name' => $request->name,
             'account_id' => $request->account_id,
@@ -149,39 +124,12 @@ class ExpenseController extends Controller
      *
      * Update existing category
      *
-     * @param Request $request
+     * @param UpdateExpenseRequest $request
      * @param Expense $expense
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Expense $expense)
+    public function update(UpdateExpenseRequest $request, Expense $expense)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'account_id' => 'required|exists:accounts,id',
-            'category_id' => 'required|exists:categories,id',
-            'description' => 'nullable',
-            'expense_date' => 'required|date_format:d.m.Y',
-            'amount' => 'required|numeric|gt:0'
-        ]);
-
-        $validator->after(function ($validator) use ($expense, $request) {
-            if (!empty($request->account_id)) {
-                $account = Account::whereId($request->account_id)->first();
-
-                if (!empty($account)) {
-                    if ($account->balance + $expense->amount - $request->amount < 0) {
-                        return $validator->errors()->add(
-                            'amount', 'Amount too big! There are not enough funds in the account'
-                        );
-                    }
-                }
-            }
-        });
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
         $expense->name = $request->name;
         $expense->account_id = $request->account_id;
         $expense->category_id = $request->category_id;
