@@ -42,7 +42,7 @@ class UpdateExpenseRequest extends FormRequest
             if (!empty($this->account_id)) {
                 $account = Account::whereId($this->account_id)->first();
 
-                if (!empty($account)) {
+                if (!empty($account) and is_numeric($this->amount)) {
                     if ($account->balance + $expense->amount - $this->amount < 0) {
                         return $validator->errors()->add(
                             'amount', 'Amount too big! There are not enough funds in the account'
