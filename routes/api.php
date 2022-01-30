@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/login', 'API\AuthController@login');
-Route::post('/register', 'API\AuthController@register');
+Route::post('/login', 'API\AuthController@login')->name('login');
+Route::post('/register', 'API\AuthController@register')->name('register');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/category', '\App\Http\Controllers\CategoryController');
@@ -23,5 +23,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/expense/aggregation', '\App\Http\Controllers\ExpenseController@aggregation');
     Route::resource('/expense', '\App\Http\Controllers\ExpenseController');
 
-    Route::post('/logout', 'API\AuthController@logout');
+    Route::post('/logout', 'API\AuthController@logout')->name('logout');
 });
