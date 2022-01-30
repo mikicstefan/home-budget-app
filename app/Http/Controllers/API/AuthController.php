@@ -68,7 +68,7 @@ class AuthController extends Controller
         }
 
         if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['message' => 'Wrong credentials! Please try again'], 401);
+            return response()->json(['message' => 'Wrong credentials! Please try again'], 422);
         }
 
         $user = User::whereEmail($request->email)->firstOrFail();

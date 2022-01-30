@@ -54,7 +54,9 @@ class ExpenseController extends Controller
             }
         }
 
-        return response()->json(['data' => $query->get()]);
+        $expenses = $query->get();
+
+        return response()->json(['data' => $expenses, 'count' => $expenses->count()]);
     }
 
     /**
