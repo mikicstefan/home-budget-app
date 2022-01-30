@@ -11,6 +11,18 @@ class AccountController extends Controller
 {
 
     /**
+     * My account
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function myAccount()
+    {
+        $account = Auth::user()->accounts()->first();
+
+        return response()->json(['data' => $account]);
+    }
+
+    /**
      * Add amount to the current balance
      *
      * @param Request $request
@@ -25,6 +37,10 @@ class AccountController extends Controller
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
+        }
+        
+        if (Auth::user()->accounts()->first()->id != $account->id) {
+            return response()->json(['message' => 'Not allowed action']);
         }
 
         $account->balance += $request->amount;

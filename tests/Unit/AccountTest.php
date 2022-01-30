@@ -16,12 +16,12 @@ class AccountTest extends TestCase
     public function add_amount_to_the_balance()
     {
         // create token with all permissions for this user
-        Sanctum::actingAs(
+        $user = Sanctum::actingAs(
             User::factory()->create(),
             ['*']
         );
 
-        $account = Account::factory()->create(); // balance 500
+        $account = Account::factory()->create(['user_id' => $user->id]); // balance 500
 
         $response = $this->json('PATCH', "/api/account/$account->id/add-balance", [
             'amount' => '20'
